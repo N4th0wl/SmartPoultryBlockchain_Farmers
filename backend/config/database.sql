@@ -3,7 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
+-- Generation Time: Feb 17, 2026 at 12:24 AM
 -- Server version: 10.4.25-MariaDB
+-- PHP Version: 7.4.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -38,6 +40,12 @@ CREATE TABLE `blockchainidentity` (
   `CompletedAt` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `blockchainidentity`
+--
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -48,6 +56,12 @@ CREATE TABLE `codecounter` (
   `EntityName` varchar(50) NOT NULL,
   `LastCounter` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `codecounter`
+--
+
+
 
 -- --------------------------------------------------------
 
@@ -62,6 +76,12 @@ CREATE TABLE `cycle` (
   `SisaHariPanen` int(11) NOT NULL CHECK (`SisaHariPanen` >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `cycle`
+--
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -74,6 +94,12 @@ CREATE TABLE `detailfeed` (
   `KodePerlengkapan` char(13) NOT NULL,
   `JumlahPakan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `detailfeed`
+--
+
+
 
 -- --------------------------------------------------------
 
@@ -89,6 +115,12 @@ CREATE TABLE `detailnotapenerimaan` (
   `Jumlah` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `detailnotapenerimaan`
+--
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -103,6 +135,12 @@ CREATE TABLE `detailorder` (
   `JumlahBarang` int(11) NOT NULL,
   `HargaSatuan` decimal(12,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `detailorder`
+--
+
+
 
 -- --------------------------------------------------------
 
@@ -123,6 +161,12 @@ CREATE TABLE `doc` (
   `KondisiAwal` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `doc`
+--
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -140,6 +184,12 @@ CREATE TABLE `kandang` (
   `Kepadatan` float DEFAULT NULL,
   `SuhuKandang` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `kandang`
+--
+
+
 
 -- --------------------------------------------------------
 
@@ -164,6 +214,12 @@ CREATE TABLE `ledger_peternakan` (
   `ValidatedAt` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `ledger_peternakan`
+--
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -177,6 +233,12 @@ CREATE TABLE `login` (
   `Password` varchar(255) NOT NULL,
   `Role` enum('admin','user') NOT NULL DEFAULT 'user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `login`
+--
+
+
 
 -- --------------------------------------------------------
 
@@ -206,6 +268,12 @@ CREATE TABLE `notapenerimaan` (
   `NamaPenerima` char(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `notapenerimaan`
+--
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -232,6 +300,12 @@ CREATE TABLE `orders` (
   `StatusOrder` enum('PROSES','SUDAH DITERIMA') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `orders`
+--
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -246,6 +320,12 @@ CREATE TABLE `panen` (
   `TotalHarga` decimal(14,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `panen`
+--
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -257,6 +337,12 @@ CREATE TABLE `pemakaianfeed` (
   `KodeKandang` char(13) NOT NULL,
   `TanggalPemakaian` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pemakaianfeed`
+--
+
+
 
 -- --------------------------------------------------------
 
@@ -271,6 +357,12 @@ CREATE TABLE `pemakaianobat` (
   `TanggalPenggunaan` date NOT NULL,
   `JumlahObat` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pemakaianobat`
+--
+
+
 
 -- --------------------------------------------------------
 
@@ -301,6 +393,12 @@ CREATE TABLE `pengiriman` (
   `NamaPerusahaanPengiriman` varchar(50) DEFAULT NULL,
   `AlamatTujuan` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pengiriman`
+--
+
+
 
 -- --------------------------------------------------------
 
@@ -345,6 +443,12 @@ CREATE TABLE `perlengkapan` (
   `Satuan` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `perlengkapan`
+--
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -356,6 +460,12 @@ CREATE TABLE `peternakan` (
   `NamaPeternakan` varchar(255) NOT NULL,
   `LokasiPeternakan` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `peternakan`
+--
+
+
 
 -- --------------------------------------------------------
 
@@ -369,6 +479,12 @@ CREATE TABLE `staf` (
   `NamaStaf` varchar(255) DEFAULT NULL,
   `PosisiStaf` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `staf`
+--
+
+
 
 -- --------------------------------------------------------
 
@@ -384,6 +500,12 @@ CREATE TABLE `statuskandang` (
   `BeratRataRata` float DEFAULT NULL,
   `TanggalPemeriksaan` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `statuskandang`
+--
+
+
 
 -- --------------------------------------------------------
 
@@ -401,6 +523,12 @@ CREATE TABLE `statuskematian` (
   `Keterangan` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `statuskematian`
+--
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -413,6 +541,12 @@ CREATE TABLE `stokwarehouse` (
   `Jumlah` int(11) NOT NULL,
   `TanggalMasukPerlengkapan` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `stokwarehouse`
+--
+
+
 
 -- --------------------------------------------------------
 
@@ -427,6 +561,12 @@ CREATE TABLE `supplier` (
   `KontakSupplier` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `supplier`
+--
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -439,6 +579,12 @@ CREATE TABLE `timkerja` (
   `NamaTim` varchar(255) DEFAULT NULL,
   `JumlahAnggota` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `timkerja`
+--
+
+
 
 -- --------------------------------------------------------
 
@@ -579,6 +725,12 @@ CREATE TABLE `warehouse` (
   `LokasiWarehouse` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `warehouse`
+--
+
+
+
 -- --------------------------------------------------------
 
 --
@@ -586,7 +738,7 @@ CREATE TABLE `warehouse` (
 --
 DROP TABLE IF EXISTS `vw_dashboard_summary`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_dashboard_summary`  AS SELECT `k`.`KodePeternakan` AS `KodePeternakan`, count(distinct `k`.`KodeKandang`) AS `TotalKandang`, coalesce(sum(`lateststatus`.`Populasi`),0) AS `TotalPopulasi`, round(avg(`k`.`SuhuKandang`),1) AS `AvgSuhu` FROM (`kandang` `k` left join (select `sk`.`KodeKandang` AS `KodeKandang`,`sk`.`Populasi` AS `Populasi` from (`statuskandang` `sk` join (select `statuskandang`.`KodeKandang` AS `KodeKandang`,max(`statuskandang`.`TanggalPemeriksaan`) AS `MaxDate` from `statuskandang` group by `statuskandang`.`KodeKandang`) `latest` on(`sk`.`KodeKandang` = `latest`.`KodeKandang` and `sk`.`TanggalPemeriksaan` = `latest`.`MaxDate`))) `lateststatus` on(`k`.`KodeKandang` = `lateststatus`.`KodeKandang`)) GROUP BY `k`.`KodePeternakan``KodePeternakan`  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_dashboard_summary`  AS SELECT `k`.`KodePeternakan` AS `KodePeternakan`, count(distinct `k`.`KodeKandang`) AS `TotalKandang`, coalesce(sum(`lateststatus`.`Populasi`),0) AS `TotalPopulasi`, round(avg(`k`.`SuhuKandang`),1) AS `AvgSuhu` FROM (`kandang` `k` left join (select `sk`.`KodeKandang` AS `KodeKandang`,`sk`.`Populasi` AS `Populasi` from (`statuskandang` `sk` join (select `statuskandang`.`KodeKandang` AS `KodeKandang`,max(`statuskandang`.`TanggalPemeriksaan`) AS `MaxDate` from `statuskandang` group by `statuskandang`.`KodeKandang`) `latest` on(`sk`.`KodeKandang` = `latest`.`KodeKandang` and `sk`.`TanggalPemeriksaan` = `latest`.`MaxDate`))) `lateststatus` on(`k`.`KodeKandang` = `lateststatus`.`KodeKandang`)) GROUP BY `k`.`KodePeternakan`  ;
 
 -- --------------------------------------------------------
 
@@ -595,7 +747,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_feed_usage_daily`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_feed_usage_daily`  AS SELECT `pf`.`KodeKandang` AS `KodeKandang`, `k`.`KodePeternakan` AS `KodePeternakan`, `pf`.`TanggalPemakaian` AS `TanggalPemakaian`, sum(`df`.`JumlahPakan`) AS `TotalPakan` FROM ((`pemakaianfeed` `pf` join `detailfeed` `df` on(`pf`.`KodePemakaianFeed` = `df`.`KodePemakaianFeed`)) join `kandang` `k` on(`pf`.`KodeKandang` = `k`.`KodeKandang`)) GROUP BY `pf`.`KodeKandang`, `k`.`KodePeternakan`, `pf`.`TanggalPemakaian``TanggalPemakaian`  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_feed_usage_daily`  AS SELECT `pf`.`KodeKandang` AS `KodeKandang`, `k`.`KodePeternakan` AS `KodePeternakan`, `pf`.`TanggalPemakaian` AS `TanggalPemakaian`, sum(`df`.`JumlahPakan`) AS `TotalPakan` FROM ((`pemakaianfeed` `pf` join `detailfeed` `df` on(`pf`.`KodePemakaianFeed` = `df`.`KodePemakaianFeed`)) join `kandang` `k` on(`pf`.`KodeKandang` = `k`.`KodeKandang`)) GROUP BY `pf`.`KodeKandang`, `k`.`KodePeternakan`, `pf`.`TanggalPemakaian`  ;
 
 -- --------------------------------------------------------
 
@@ -622,7 +774,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_mortality_kpi`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_mortality_kpi`  AS SELECT `sm`.`KodeKandang` AS `KodeKandang`, `k`.`KodePeternakan` AS `KodePeternakan`, sum(`sm`.`JumlahMati`) AS `TotalMati`, sum(`sm`.`JumlahReject`) AS `TotalReject`, max(`sm`.`TanggalKejadian`) AS `LastMortalityDate`, coalesce(`doc`.`JumlahDiterima`,0) AS `InitialPopulasi`, round(sum(`sm`.`JumlahMati`) / nullif(`doc`.`JumlahDiterima`,0) * 100,2) AS `MortalityRate` FROM ((`statuskematian` `sm` join `kandang` `k` on(`sm`.`KodeKandang` = `k`.`KodeKandang`)) left join `doc` on(`doc`.`KodeKandang` = `k`.`KodeKandang`)) GROUP BY `sm`.`KodeKandang`, `k`.`KodePeternakan`, `doc`.`JumlahDiterima``JumlahDiterima`  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_mortality_kpi`  AS SELECT `sm`.`KodeKandang` AS `KodeKandang`, `k`.`KodePeternakan` AS `KodePeternakan`, sum(`sm`.`JumlahMati`) AS `TotalMati`, sum(`sm`.`JumlahReject`) AS `TotalReject`, max(`sm`.`TanggalKejadian`) AS `LastMortalityDate`, coalesce(`doc`.`JumlahDiterima`,0) AS `InitialPopulasi`, round(sum(`sm`.`JumlahMati`) / nullif(`doc`.`JumlahDiterima`,0) * 100,2) AS `MortalityRate` FROM ((`statuskematian` `sm` join `kandang` `k` on(`sm`.`KodeKandang` = `k`.`KodeKandang`)) left join `doc` on(`doc`.`KodeKandang` = `k`.`KodeKandang`)) GROUP BY `sm`.`KodeKandang`, `k`.`KodePeternakan`, `doc`.`JumlahDiterima`  ;
 
 -- --------------------------------------------------------
 
@@ -631,7 +783,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_performance_summary`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_performance_summary`  AS SELECT `p`.`KodeKandang` AS `KodeKandang`, `k`.`KodePeternakan` AS `KodePeternakan`, round(avg(`p`.`ActualAverageDailyGain`),2) AS `AvgADG`, round(avg(`p`.`ActualFeedIntake`),2) AS `AvgFeedIntake`, round(avg(`p`.`ActualWaterIntake`),2) AS `AvgWaterIntake`, max(`p`.`TanggalPerformance`) AS `LastRecordDate` FROM (`performance` `p` join `kandang` `k` on(`p`.`KodeKandang` = `k`.`KodeKandang`)) GROUP BY `p`.`KodeKandang`, `k`.`KodePeternakan``KodePeternakan`  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_performance_summary`  AS SELECT `p`.`KodeKandang` AS `KodeKandang`, `k`.`KodePeternakan` AS `KodePeternakan`, round(avg(`p`.`ActualAverageDailyGain`),2) AS `AvgADG`, round(avg(`p`.`ActualFeedIntake`),2) AS `AvgFeedIntake`, round(avg(`p`.`ActualWaterIntake`),2) AS `AvgWaterIntake`, max(`p`.`TanggalPerformance`) AS `LastRecordDate` FROM (`performance` `p` join `kandang` `k` on(`p`.`KodeKandang` = `k`.`KodeKandang`)) GROUP BY `p`.`KodeKandang`, `k`.`KodePeternakan`  ;
 
 --
 -- Indexes for dumped tables
@@ -889,37 +1041,37 @@ ALTER TABLE `warehouse`
 -- AUTO_INCREMENT for table `blockchainidentity`
 --
 ALTER TABLE `blockchainidentity`
-  MODIFY `IdIdentity` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdIdentity` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `cycle`
 --
 ALTER TABLE `cycle`
-  MODIFY `KodeCycle` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `KodeCycle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `detailfeed`
 --
 ALTER TABLE `detailfeed`
-  MODIFY `KodeDetailFeed` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `KodeDetailFeed` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `ledger_peternakan`
 --
 ALTER TABLE `ledger_peternakan`
-  MODIFY `IdBlock` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdBlock` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `peternakan`
 --
 ALTER TABLE `peternakan`
-  MODIFY `KodePeternakan` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `KodePeternakan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `todo`
