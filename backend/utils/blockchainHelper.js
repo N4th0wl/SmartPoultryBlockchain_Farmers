@@ -55,26 +55,29 @@ async function getNextBlockIndex(sequelize, kodeCycle, transaction = null) {
 
 /**
  * Calculate mortality rate for a kandang
+ * Based on initial population placed (JumlahDiterima - JumlahMatiPraKandang)
  */
 async function calcMortalityRate(sequelize, kodeKandang, transaction = null) {
     const opts = { type: sequelize.QueryTypes.SELECT };
     if (transaction) opts.transaction = transaction;
 
+    // Get initial population placed in kandang (received minus dead-on-arrival)
     const [docResult] = await sequelize.query(
-        `SELECT COALESCE(SUM(JumlahDiterima), 0) AS totalDoc FROM DOC WHERE KodeKandang = :kodeKandang`,
+        `SELECT COALESCE(SUM(JumlahDiterima - COALESCE(JumlahMatiPraKandang, 0)), 0) AS initialPopulation FROM DOC WHERE KodeKandang = :kodeKandang`,
         { ...opts, replacements: { kodeKandang } }
     );
 
+    // Get total deaths + rejects in kandang
     const [deathResult] = await sequelize.query(
-        `SELECT COALESCE(SUM(JumlahMati), 0) AS totalMati FROM StatusKematian WHERE KodeKandang = :kodeKandang`,
+        `SELECT COALESCE(SUM(JumlahMati), 0) AS totalMati, COALESCE(SUM(JumlahReject), 0) AS totalReject FROM StatusKematian WHERE KodeKandang = :kodeKandang`,
         { ...opts, replacements: { kodeKandang } }
     );
 
-    const totalDoc = docResult ? docResult.totalDoc : 0;
-    const totalMati = deathResult ? deathResult.totalMati : 0;
+    const initialPopulation = docResult ? docResult.initialPopulation : 0;
+    const totalLoss = deathResult ? (deathResult.totalMati + deathResult.totalReject) : 0;
 
-    if (totalDoc > 0) {
-        return parseFloat(((totalMati / totalDoc) * 100).toFixed(2));
+    if (initialPopulation > 0) {
+        return parseFloat(((totalLoss / initialPopulation) * 100).toFixed(2));
     }
     return 0;
 }
@@ -218,7 +221,7 @@ async function createKandangAktifBlock(sequelize, { kodePeternakan, kodeCycle, k
 /**
  * DOC_MASUK BLOCK - When DOC enters a kandang
  */
-async function createDocMasukBlock(sequelize, { kodePeternakan, kodeCycle, kodeKandang, kodeDOC, brandDOC, tipeAyam, tanggalMasuk, jumlahDipesan, jumlahDiterima, jumlahMatiPraKandang, kondisiAwal, transaction = null }) {
+async function createDocMasukBlock(sequelize, { kodePeternakan, kodeCycle, kodeKandang, kodeDOC, brandDOC, tipeAyam, tanggalMasuk, jumlahDipesan, jumlahDiterima, jumlahMatiPraKandang, jumlahDitempatkan, kondisiAwal, transaction = null }) {
     return await createBlock(sequelize, {
         kodePeternakan,
         kodeCycle,
@@ -235,6 +238,7 @@ async function createDocMasukBlock(sequelize, { kodePeternakan, kodeCycle, kodeK
             jumlah_dipesan: jumlahDipesan,
             jumlah_diterima: jumlahDiterima,
             jumlah_mati_pra_kandang: jumlahMatiPraKandang,
+            jumlah_ditempatkan: jumlahDitempatkan || (jumlahDiterima - (jumlahMatiPraKandang || 0)),
             kondisi_awal: kondisiAwal
         },
         transaction
@@ -514,9 +518,9 @@ function getBlockSummary(tipeBlock, payload) {
         case 'KANDANG_AKTIF':
             return `Kandang ${payload.kode_kandang || '?'} diaktifkan`;
         case 'DOC_MASUK':
-            return `${payload.jumlah_diterima || '?'} ekor DOC masuk (${payload.brand_doc || '?'} - ${payload.tipe_ayam || '?'})`;
+            return `${payload.jumlah_ditempatkan || payload.jumlah_diterima || '?'} ekor DOC masuk kandang (${payload.brand_doc || '?'} - ${payload.tipe_ayam || '?'}, diterima: ${payload.jumlah_diterima || '?'}, DOA: ${payload.jumlah_mati_pra_kandang || 0})`;
         case 'LAPORAN_MORTALITY':
-            return `Mortality: ${payload.jumlah_mati || '?'} ekor mati (rate: ${payload.mortality_rate_percent || '?'}%)`;
+            return `Mortality: ${payload.jumlah_mati || 0} mati, ${payload.jumlah_reject || 0} reject (rate: ${payload.mortality_rate_percent || '?'}%)`;
         case 'PEMAKAIAN_OBAT':
             return `Obat ${payload.jenis_obat || '?'} digunakan (${payload.jumlah_obat || '?'} unit)`;
         case 'PANEN':

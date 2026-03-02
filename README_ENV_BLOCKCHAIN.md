@@ -1,34 +1,3 @@
-# Example for ENV in Backend
-
-Server
-PORT=5000
-NODE_ENV=development
-CLIENT_ORIGIN=http://localhost:5173
-
-Database
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=
-DB_NAME=smartpoultry_peternakan
-
-Auth / Security
-JWT_SECRET=super_secret_jwt_key
-JWT_EXPIRES_IN=1d
-BCRYPT_SALT_ROUNDS=10
-
-Uploads
-UPLOAD_DIR=uploads
-
-(Opsional) Email / Cloud services, isi jika diperlukan
-SMTP_HOST=
-SMTP_PORT=
-SMTP_USER=
-SMTP_PASS=
-
-# Example for ENV in Frontend
-VITE_API_BASE_URL=http://localhost:5000/api
-
 # SmartPoultry Blockchain - Peternakan Node
 
 Proyek ini adalah sistem manajemen peternakan ayam berbasis web dengan integrasi konsep blockchain di sisi aplikasi (application-level blockchain) untuk menjaga integritas data dan _traceability_ (keterlacakan) pasokan ayam dari peternakan menuju ke _processor_ (pemotongan).

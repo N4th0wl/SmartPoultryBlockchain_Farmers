@@ -301,6 +301,8 @@ function DashboardKandang() {
 
             setCrudModalOpen(false)
             loadDetailData(id, detailTab)
+            // Also refresh main table so PopulasiTerkini updates after kematian/status changes
+            fetchData()
         } catch (error) {
             console.error('CRUD save error:', error)
             toast.error(error.response?.data?.error || 'Gagal menyimpan data')

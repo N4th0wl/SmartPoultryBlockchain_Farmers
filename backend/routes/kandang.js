@@ -205,11 +205,11 @@ router.post('/', async (req, res) => {
         }, { transaction });
 
         // Update DOC - assign to kandang
-        // Update JumlahDiterima to reflect placed amount
+        // NOTE: Do NOT overwrite JumlahDiterima — it must stay as the original received amount.
+        // placementAmount is the number placed (JumlahDiterima - JumlahMatiPraKandang), stored in StatusKandang.Populasi.
         await doc.update({
             KodeKandang: kodeKandang,
-            TanggalMasukKandang: new Date(),
-            JumlahDiterima: placementAmount
+            TanggalMasukKandang: new Date()
         }, { transaction });
 
         // Create initial status kandang
@@ -256,8 +256,9 @@ router.post('/', async (req, res) => {
                 tipeAyam: doc.TipeAyam,
                 tanggalMasuk: new Date().toISOString().split('T')[0],
                 jumlahDipesan: doc.JumlahDipesan,
-                jumlahDiterima: placementAmount,
+                jumlahDiterima: doc.JumlahDiterima,
                 jumlahMatiPraKandang: doc.JumlahMatiPraKandang || 0,
+                jumlahDitempatkan: placementAmount,
                 kondisiAwal: doc.KondisiAwal,
                 transaction
             });
@@ -697,7 +698,7 @@ router.post('/:id/kematian', async (req, res) => {
         const { tanggalKejadian, jumlahMati, jumlahReject, keterangan } = req.body;
         const kodePeternakan = req.user.kodePeternakan;
 
-        const kandang = await Kandang.findOne({ where: { KodeKandang: id, KodePeternakan: kodePeternakan } });
+        const kandang = await Kandang.findOne({ where: { KodeKandang: id, KodePeternakan: kodePeternakan }, transaction });
         if (!kandang) {
             await transaction.rollback();
             return res.status(403).json({ error: 'Unauthorized' });
@@ -713,7 +714,7 @@ router.post('/:id/kematian', async (req, res) => {
             Keterangan: keterangan
         }, { transaction });
 
-        // Update latest status populasi
+        // Update latest status populasi — create a new StatusKandang record with reduced population
         const latestStatus = await StatusKandang.findOne({
             where: { KodeKandang: id },
             order: [['TanggalPemeriksaan', 'DESC']],
@@ -722,7 +723,18 @@ router.post('/:id/kematian', async (req, res) => {
 
         if (latestStatus) {
             const totalLoss = (parseInt(jumlahMati) || 0) + (parseInt(jumlahReject) || 0);
-            await latestStatus.decrement('Populasi', { by: totalLoss, transaction });
+            const newPopulasi = Math.max(0, (latestStatus.Populasi || 0) - totalLoss);
+
+            // Create a new status record with updated population
+            const kodeStatus = await generateKodeStatus(sequelize, transaction);
+            await StatusKandang.create({
+                KodeStatus: kodeStatus,
+                KodeKandang: id,
+                UmurAyam: latestStatus.UmurAyam,
+                Populasi: newPopulasi,
+                BeratRataRata: latestStatus.BeratRataRata,
+                TanggalPemeriksaan: tanggalKejadian || new Date()
+            }, { transaction });
         }
 
         // === BLOCKCHAIN: Create Mortality Block ===

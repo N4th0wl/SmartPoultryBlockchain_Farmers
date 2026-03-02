@@ -42,16 +42,30 @@ async function generateCode(sequelize, entityName, transaction) {
         throw new Error(`Unknown entity: ${entityName}`);
     }
 
-    // Atomically increment counter and get new value
-    await sequelize.query(
-        `UPDATE CodeCounter SET LastCounter = LastCounter + 1 WHERE EntityName = :entityName`,
-        { replacements: { entityName }, type: sequelize.QueryTypes.UPDATE, transaction }
-    );
+    const { CodeCounter } = sequelize.models;
+    if (!CodeCounter) {
+        throw new Error('CodeCounter model not found in sequelize instance');
+    }
 
-    const [rows] = await sequelize.query(
-        `SELECT LastCounter FROM CodeCounter WHERE EntityName = :entityName`,
-        { replacements: { entityName }, type: sequelize.QueryTypes.SELECT, transaction }
-    );
+    // Ensure the counter exists
+    await CodeCounter.findOrCreate({
+        where: { EntityName: entityName },
+        defaults: { LastCounter: 0 },
+        transaction
+    });
+
+    // Increment and get the returned model instance. Note for mysql it might not return the updated row on increment.
+    // Instead we do an UPDATE and then SELECT.
+    await CodeCounter.increment('LastCounter', {
+        by: 1,
+        where: { EntityName: entityName },
+        transaction
+    });
+
+    const rows = await CodeCounter.findOne({
+        where: { EntityName: entityName },
+        transaction
+    });
 
     if (!rows || rows.LastCounter === undefined) {
         throw new Error(`CodeCounter not found for entity: ${entityName}`);

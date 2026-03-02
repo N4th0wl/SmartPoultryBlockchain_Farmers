@@ -207,7 +207,8 @@ router.put('/:id', async (req, res) => {
                 KodeOrder: req.params.id,
                 KodePeternakan: kodePeternakan
             },
-            include: [{ model: DetailOrder }]
+            include: [{ model: DetailOrder }],
+            transaction
         });
 
         if (!order) {
@@ -304,12 +305,15 @@ router.put('/:id', async (req, res) => {
 
                     // 3. Update Stock if PERLENGKAPAN
                     if (detail.JenisBarang === 'PERLENGKAPAN') {
-                        // Try to find perlengkapan by name
+                        // Try to find perlengkapan by name within the same peternakan
                         let perlengkapan = await require('../models').Perlengkapan.findOne({
-                            where: Sequelize.where(
-                                Sequelize.fn('LOWER', Sequelize.col('NamaPerlengkapan')),
-                                Sequelize.fn('LOWER', detail.NamaBarang)
-                            ),
+                            where: {
+                                KodePeternakan: kodePeternakan,
+                                [Sequelize.Op.and]: Sequelize.where(
+                                    Sequelize.fn('LOWER', Sequelize.col('NamaPerlengkapan')),
+                                    Sequelize.fn('LOWER', detail.NamaBarang)
+                                )
+                            },
                             transaction
                         });
 
@@ -418,7 +422,7 @@ router.put('/:id', async (req, res) => {
     } catch (error) {
         if (transaction) await transaction.rollback();
         console.error('Update order error:', error);
-        res.status(500).json({ error: 'Failed to update order' });
+        res.status(500).json({ error: 'Failed to update order', details: error.message });
     }
 });
 

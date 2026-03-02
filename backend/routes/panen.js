@@ -157,14 +157,7 @@ router.post('/pengiriman', async (req, res) => {
             TanggalPenerimaan: tanggalPenerimaan
         }, { transaction });
 
-        await transaction.commit();
-
-        res.status(201).json({
-            ...pengiriman.toJSON(),
-            NotaPengiriman: notaPengiriman.toJSON()
-        });
-
-        // === BLOCKCHAIN: Create Transfer Block (async, non-blocking) ===
+        // === BLOCKCHAIN: Create Transfer Block ===
         try {
             await blockchain.createTransferBlock(sequelize, {
                 kodePeternakan,
@@ -175,11 +168,19 @@ router.post('/pengiriman', async (req, res) => {
                 kodePanen: kodePanen,
                 tanggalPenerimaan: tanggalPenerimaan,
                 perusahaanPengiriman: namaPerusahaanPengiriman,
-                alamatTujuan: alamatTujuan
+                alamatTujuan: alamatTujuan,
+                transaction
             });
         } catch (bcError) {
             console.error('Blockchain transfer block error (non-fatal):', bcError);
         }
+
+        await transaction.commit();
+
+        res.status(201).json({
+            ...pengiriman.toJSON(),
+            NotaPengiriman: notaPengiriman.toJSON()
+        });
     } catch (error) {
         if (transaction) await transaction.rollback();
         console.error('Create pengiriman error:', error);
@@ -298,29 +299,8 @@ router.post('/pengiriman/:id/nota', async (req, res) => {
         });
 
         res.status(201).json(nota);
-
-        // === BLOCKCHAIN: Create Transfer Block (async, non-blocking) ===
-        try {
-            const pengiriman = await Pengiriman.findByPk(req.params.id);
-            if (pengiriman) {
-                const kandang = await Kandang.findByPk(pengiriman.KodeKandang);
-                if (kandang) {
-                    await blockchain.createTransferBlock(sequelize, {
-                        kodePeternakan,
-                        kodeCycle: kandang.KodeCycle,
-                        kodeKandang: pengiriman.KodeKandang,
-                        kodeNotaPengiriman: kodeNotaPengiriman,
-                        kodePengiriman: req.params.id,
-                        kodePanen: pengiriman.KodePanen,
-                        tanggalPenerimaan: tanggalPenerimaan || new Date().toISOString().split('T')[0],
-                        perusahaanPengiriman: pengiriman.NamaPerusahaanPengiriman,
-                        alamatTujuan: pengiriman.AlamatTujuan
-                    });
-                }
-            }
-        } catch (bcError) {
-            console.error('Blockchain transfer block error (non-fatal):', bcError);
-        }
+        // NOTE: TRANSFER_PROCESSOR blockchain block is already created in POST /pengiriman
+        // No need to create again here to avoid duplicate blocks in the chain
     } catch (error) {
         console.error('Create nota error:', error);
         res.status(500).json({ error: 'Failed to create nota pengiriman' });
@@ -426,9 +406,7 @@ router.post('/', async (req, res) => {
             TotalHarga: totalHarga || 0
         });
 
-        res.status(201).json(panen);
-
-        // === BLOCKCHAIN: Create Panen Block (async, non-blocking) ===
+        // === BLOCKCHAIN: Create Panen Block ===
         try {
             await blockchain.createPanenBlock(sequelize, {
                 kodePeternakan,
@@ -442,6 +420,8 @@ router.post('/', async (req, res) => {
         } catch (bcError) {
             console.error('Blockchain panen block error (non-fatal):', bcError);
         }
+
+        res.status(201).json(panen);
     } catch (error) {
         console.error('Create panen error:', error);
         res.status(500).json({ error: 'Failed to create panen' });
